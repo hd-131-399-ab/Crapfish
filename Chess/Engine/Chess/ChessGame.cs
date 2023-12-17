@@ -1,5 +1,4 @@
 ﻿using Chess.Engine.Board;
-using Chess.Engine.CrapFish;
 using Chess.Engine.Pieces;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ namespace Chess.Engine.Chess
 {
     public class ChessGame
     {
-        public static ChessGame CurrentGame;
+        public static ChessGame _CurrentGame;
 
         private Rules _rules = new();
 
@@ -40,14 +39,14 @@ namespace Chess.Engine.Chess
 
         public ChessGame(string fEN, GameMode gameMode)
         {
-            CurrentGame = this;
+            _CurrentGame = this;
             CurrentGameMode = gameMode;
 
             ChessBoard._ChessBoard = new();
 
             FEN = fEN;
 
-            //FEN = "3r3r/3k/8/3R1RK/8/8/8/8";
+            //FEN = "3R3R/3K/8/3r1rk/8/8/8/8";
 
             //promotion
             //FEN = "8/PPP1PPPP/8/8/k2K/8/pppppppp/8";
@@ -67,9 +66,11 @@ namespace Chess.Engine.Chess
             //empty castle stiuation
             //FEN = "r3k2r/8/8/8/8/8/8/R3K2R";
 
-
             //double check(black to move)
             //FEN = "8/8/8/8/Rrb3K/1k/8/4R";
+
+            //easy check
+            FEN = "N5BB/1k/3PPPP/4QQ/4RRK/8/8/2rrbbpq";
 
             new BoardMaker("#909090", "#505050");
 
@@ -141,7 +142,7 @@ namespace Chess.Engine.Chess
             }
             else
             {
-                Evaluator evaluator = new(1);
+                //get move
             }
         }
 

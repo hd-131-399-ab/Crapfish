@@ -86,7 +86,7 @@ namespace Chess.Engine.Board
         {
             ChessPiece piece = GetPieceAt(position);
 
-            MainWindow.ChessBoard.Children.Remove(piece.Piece);
+            MainWindow._MainWindow.chessBoard.Children.Remove(piece.Piece);
 
             PieceList.Remove(piece);
             Pieces[position.Row, position.Column] = null;
@@ -96,7 +96,7 @@ namespace Chess.Engine.Board
         {           
             foreach (ChessPiece piece in PieceList)
             {
-                MainWindow.ChessBoard.Children.Remove(piece.Piece);
+                MainWindow._MainWindow.chessBoard.Children.Remove(piece.Piece);
             }
 
             PieceList.Clear();

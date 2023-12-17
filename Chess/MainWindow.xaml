@@ -38,6 +38,7 @@
         <Grid x:Name="winnerGrd" HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="400" Visibility="Hidden">
 
             <Label x:Name="winnerLbl" FontSize="40" HorizontalAlignment="Center" Height="60"/>
+            <Label x:Name="evaluationLbl" Height="40" Content="Test" FontSize="40" VerticalAlignment="Bottom"/>
 
         </Grid>
     </Grid>

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Chess.Engine.Board;
@@ -10,6 +8,20 @@ namespace Chess.Engine.Pieces.ChessPieces
 {
     public class Knight : ChessPiece
     {
+        #region Vectors
+        static Vector _rightUp = new(2, 1);
+        static Vector _rightDown = new(2, -1);
+
+        static Vector _leftUp = new(-2, 1);
+        static Vector _leftDown = new(-2, -1);
+
+        static Vector _upLeft = new(-1, 2);
+        static Vector _upRight = new(1, 2);
+
+        static Vector _downLeft = new(-1, -2);
+        static Vector _downRight = new(1, -2);
+        #endregion
+
         public Knight(Square position, PieceColor pieceColor)
         {
             Position = position;
@@ -55,7 +67,7 @@ namespace Chess.Engine.Pieces.ChessPieces
 
             piece.MouseUp += OnChessPiece_MouseUp;
 
-            MainWindow.ChessBoard.Children.Add(piece);
+            MainWindow._MainWindow.chessBoard.Children.Add(piece);
 
             return piece;
         }
@@ -73,32 +85,20 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         private void CalculateForkMoves()
         {
-            Vector2 upRight = new(1, -2);
-            Vector2 upLeft = new(-1, -2);
+            HandlePieceInformation(_upLeft);
+            HandlePieceInformation(_upRight);
 
-            Vector2 rightUp = new(2, -1);
-            Vector2 rightDown = new(2, 1);
+            HandlePieceInformation(_rightUp);
+            HandlePieceInformation(_rightDown);
 
-            Vector2 downRight = new(1, 2);
-            Vector2 downLeft = new(-1, 2);
+            HandlePieceInformation(_downLeft);
+            HandlePieceInformation(_downRight);
 
-            Vector2 leftDown = new(-2, 1);
-            Vector2 leftUp = new(-2, -1);
-
-            HandlePieceInformation(upRight);
-            HandlePieceInformation(upLeft);
-
-            HandlePieceInformation(rightUp);
-            HandlePieceInformation(rightDown);
-
-            HandlePieceInformation(downRight);
-            HandlePieceInformation(downLeft);
-
-            HandlePieceInformation(leftDown);
-            HandlePieceInformation(leftUp);
+            HandlePieceInformation(_leftUp);
+            HandlePieceInformation(_leftDown);
         }
 
-        private void HandlePieceInformation(Vector2 vector)
+        private void HandlePieceInformation(Vector vector)
         {
             int row = Position.Row + (int)vector.Y;
             int column = Position.Column + (int)vector.X;
@@ -111,17 +111,18 @@ namespace Chess.Engine.Pieces.ChessPieces
                 {
                     _LegalMoves.Add(new(row, column));
                     _AllMoves.Add(new(row, column));
-                    return;
-                }
-
-                if (piece.Color != Color)
-                {
-                    _LegalCaptures.Add(piece);
-                    _AllMoves.Add(piece.Position);
                 }
                 else
                 {
-                    piece.IsCovered = true;
+                    if (piece.Color != Color)
+                    {
+                        _LegalCaptures.Add(piece);
+                        _AllMoves.Add(piece.Position);
+                    }
+                    else
+                    {
+                        piece.IsCovered = true;
+                    }
                 }
             }
         }

@@ -41,7 +41,7 @@ namespace Chess.Engine.Board
 
             CastleGrd = castleGrid;
 
-            MainWindow.ChessBoard.Children.Add(CastleGrd);
+            MainWindow._MainWindow.chessBoard.Children.Add(CastleGrd);
             CastleGrids.Add(this);
         }
 
@@ -57,7 +57,7 @@ namespace Chess.Engine.Board
 
         public void Destroy()
         {
-            MainWindow.ChessBoard.Children.Remove(CastleGrd);
+            MainWindow._MainWindow.chessBoard.Children.Remove(CastleGrd);
         }
 
         private void OnCastleGrid_MouseUp(object sender, MouseButtonEventArgs e)
@@ -67,7 +67,7 @@ namespace Chess.Engine.Board
 
             Castle(king, rook);
 
-            ChessGame.CurrentGame.SwitchMoves();
+            ChessGame._CurrentGame.SwitchMoves();
         }
 
         private void Castle(King king, Rook rook)
@@ -82,11 +82,11 @@ namespace Chess.Engine.Board
         {
             if (king.Color == Pieces.ChessPiece.PieceColor.White)
             {
-                ChessGame.CurrentGame.WhiteCastleRights = ChessGame.CastleRights.None;
+                ChessGame._CurrentGame.WhiteCastleRights = ChessGame.CastleRights.None;
             }
             else
             {
-                ChessGame.CurrentGame.BlackCastleRights = ChessGame.CastleRights.None;
+                ChessGame._CurrentGame.BlackCastleRights = ChessGame.CastleRights.None;
             }
         }
     }

@@ -62,7 +62,7 @@ namespace Chess.Engine.Board
         {
             if (CheckMrker != null)
             {
-                MainWindow.ChessBoard.Children.Remove(CheckMrker);
+                MainWindow._MainWindow.chessBoard.Children.Remove(CheckMrker);
             }
 
             CheckMrker = new()
@@ -76,7 +76,7 @@ namespace Chess.Engine.Board
             Visibility = visibility;
             Position = new(0, 0);
 
-            MainWindow.ChessBoard.Children.Add(CheckMrker);
+            MainWindow._MainWindow.chessBoard.Children.Add(CheckMrker);
         }
 
         public void Move(Square newPosition)
@@ -100,7 +100,7 @@ namespace Chess.Engine.Board
 
         public void Destroy()
         {
-            MainWindow.ChessBoard.Children.Remove(CheckMrker);
+            MainWindow._MainWindow.chessBoard.Children.Remove(CheckMrker);
 
             CheckMrker = null;
         }

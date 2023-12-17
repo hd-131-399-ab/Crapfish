@@ -1,6 +1,5 @@
 ﻿using Chess.Engine.Board;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace Chess.Engine.Pieces
 {
@@ -8,45 +7,44 @@ namespace Chess.Engine.Pieces
     {
         public List<Square> VirtualMoves { get; set; } = new();
 
-        internal override List<Square> CalculateLegalMoves()
-        {
-            return CalculateAllLegalMoves();
-        }
+        internal override List<Square> CalculateLegalMoves() => CalculateAllLegalMoves();
 
         internal abstract List<Square> CalculateAllLegalMoves();
+
+        #region Vecors
+        static Vector _Left = new(-1, 0);
+        static Vector _Right = new(1, 0);
+        static Vector _Up = new(0, -1);
+        static Vector _Down = new(0, 1);
+
+        static Vector _LeftDown = new(-1, 1);
+        static Vector _RightUp = new(1, -1);
+        static Vector _LeftUp = new(-1, -1);
+        static Vector _RightDown = new(1, 1);
+        #endregion
 
         protected void CalculateStraightMoves()
         {
             _nextMoveIsVirtual = false;
 
-            Vector2 left = new(-1, 0);
-            Vector2 right = new(1, 0);
-            Vector2 down = new(0, 1);
-            Vector2 up = new(0, -1);
-
-            CalculateLine(left);
-            CalculateLine(right);
-            CalculateLine(down);
-            CalculateLine(up);
+            CalculateLine(_Left);
+            CalculateLine(_Right);
+            CalculateLine(_Down);
+            CalculateLine(_Up);
         }
 
         protected void CalculateDiagonalMoves()
         {
             _nextMoveIsVirtual = false;
 
-            Vector2 leftDown = new(-1, 1);
-            Vector2 rightUp = new(1, -1);
-            Vector2 leftUp = new(-1, -1);
-            Vector2 rightDown = new(1, 1);
-
-            CalculateLine(leftDown);
-            CalculateLine(rightUp);
-            CalculateLine(leftUp);
-            CalculateLine(rightDown);
+            CalculateLine(_LeftDown);
+            CalculateLine(_RightUp);
+            CalculateLine(_LeftUp);
+            CalculateLine(_RightDown);
         }
 
         private bool _nextMoveIsVirtual { get; set; }
-        protected void CalculateLine(Vector2 vector)
+        protected void CalculateLine(Vector vector)
         {
             int newRow = Position.Row;
             int newColumn = Position.Column;

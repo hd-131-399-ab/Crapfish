@@ -8,7 +8,7 @@ namespace Chess.Engine.CrapFish
     {
         public float Evaluation { get; set; }
 
-        public Evaluator(int depth)
+        public void EvaluatePositions(int depth)
         {
             for (int i = 0; i < depth; i++)
             {
@@ -26,14 +26,6 @@ namespace Chess.Engine.CrapFish
                     {
                         Evaluation += piece.Value;
                     }
-
-                    if (piece.IsCovered)
-                    {
-                        Evaluation += .5f;
-                    }
-
-                    Evaluation += piece._LegalCaptures.Count / 5;
-                    Evaluation += piece._LegalMoves.Count / 10;
                 }
                 else
                 {
@@ -41,16 +33,13 @@ namespace Chess.Engine.CrapFish
                     {
                         Evaluation -= piece.Value;
                     }
-
-                    if (piece.IsCovered)
-                    {
-                        Evaluation -= .5f;
-                    }
-
-                    Evaluation -= piece._LegalCaptures.Count / 5;
-                    Evaluation -= piece._LegalMoves.Count / 10;
                 }
             }
+        }
+
+        public void UpdateEvaluation()
+        {
+
         }
     }
 }

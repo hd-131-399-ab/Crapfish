@@ -17,9 +17,6 @@ namespace Chess.Engine.Board
             Column = column;
         }
 
-        public static bool Equals(Square pos1, Square pos2)
-        {
-            return pos1.Row == pos2.Row && pos1.Column == pos2.Column;
-        }
+        public static bool IsEqual(Square pos1, Square pos2) => pos1.Row == pos2.Row && pos1.Column == pos2.Column;
     }
 }

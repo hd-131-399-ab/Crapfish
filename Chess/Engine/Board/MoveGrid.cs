@@ -11,6 +11,7 @@ using Chess.Engine.Pieces.ChessPieces;
 
 namespace Chess.Engine.Board
 {
+    //TODO:structure
     public class MoveGrid
     {
         public Rectangle MoveGrd;
@@ -50,7 +51,7 @@ namespace Chess.Engine.Board
 
             MoveGrd = moveGrid;
 
-            MainWindow.ChessBoard.Children.Add(MoveGrd);
+            MainWindow._MainWindow.chessBoard.Children.Add(MoveGrd);
             MoveGrids.Add(this);
         }
 
@@ -64,10 +65,7 @@ namespace Chess.Engine.Board
             MoveGrids.Clear();
         }
 
-        private void Destroy()
-        {
-            MainWindow.ChessBoard.Children.Remove(MoveGrd);
-        }
+        private void Destroy() => MainWindow._MainWindow.chessBoard.Children.Remove(MoveGrd);
 
         private void OnMoveGrid_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -77,7 +75,7 @@ namespace Chess.Engine.Board
             }
 
             ClickBehaviour();
-            ChessGame.CurrentGame.SwitchMoves();
+            ChessGame._CurrentGame.SwitchMoves();
         }
 
         //TODO: CaptureGrid : MoveGrid

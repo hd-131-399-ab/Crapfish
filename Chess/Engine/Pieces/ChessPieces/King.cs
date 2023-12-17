@@ -2,7 +2,7 @@
 using Chess.Engine.Chess;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Net.NetworkInformation;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
@@ -13,10 +13,23 @@ namespace Chess.Engine.Pieces.ChessPieces
         public List<ChessPiece> PinnedPieces { get; set; } = new();
         public List<CastleMove> _CastleMoves { get; set; } = new();
 
+        #region Vectors
+        static Vector _UpLeft = new(-1, -1);
+        static Vector _Up = new(0, -1);
+        static Vector _UpRight = new(1, -1);
+
+        static Vector _Right = new(1, 0);
+        static Vector _RightDown = new(1, 1);
+
+        static Vector _Down = new(0, 1);
+        static Vector _DownLeft = new(-1, 1);
+        static Vector _Left = new(-1, 0);
+        #endregion
+
         public bool IsChecked { get; set; }
         public int CheckCount { get; set; }
 
-        private bool _canCastle = true;
+        private bool _canCastle = true; 
         public bool CanCastle
         {
             get
@@ -75,7 +88,7 @@ namespace Chess.Engine.Pieces.ChessPieces
 
             piece.MouseUp += OnChessPiece_MouseUp;
 
-            MainWindow.ChessBoard.Children.Add(piece);
+            MainWindow._MainWindow.chessBoard.Children.Add(piece);
 
             return piece;
         }
@@ -114,31 +127,19 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         private void CalculateKingMoves()
         {
-            Vector2 upLeft = new(-1, -1);
-            Vector2 up = new(0, -1);
-            Vector2 upRight = new(1, -1);
+            HandlePieceInformation(_UpLeft);
+            HandlePieceInformation(_Up);
+            HandlePieceInformation(_UpRight);
 
-            Vector2 right = new(1, 0);
-            Vector2 rightDown = new(1, 1);
-
-            Vector2 down = new(0, 1);
-            Vector2 downLeft = new(-1, 1);
-
-            Vector2 left = new(-1, 0);
+            HandlePieceInformation(_Right);
+            HandlePieceInformation(_RightDown);
             
-            HandlePieceInformation(upLeft);
-            HandlePieceInformation(up);
-            HandlePieceInformation(upRight);
-
-            HandlePieceInformation(right);
-            HandlePieceInformation(rightDown);
-            
-            HandlePieceInformation(down);
-            HandlePieceInformation(downLeft);
-            HandlePieceInformation(left);
+            HandlePieceInformation(_Down);
+            HandlePieceInformation(_DownLeft);
+            HandlePieceInformation(_Left);
         }
 
-        private void HandlePieceInformation(Vector2 vector)
+        private void HandlePieceInformation(Vector vector)
         {
             int row = Position.Row + (int)vector.Y;
             int column = Position.Column + (int)vector.X;
@@ -277,6 +278,7 @@ namespace Chess.Engine.Pieces.ChessPieces
             }
         }
 
+
         private void FindDiagonalPins()
         {
             int row = Position.Row;
@@ -349,7 +351,7 @@ namespace Chess.Engine.Pieces.ChessPieces
             {
                 if (Color == piece.Color)
                 {
-                    _pieceInWay = piece;                    
+                    _pieceInWay = piece;
                 }
                 else
                 {
@@ -405,7 +407,18 @@ namespace Chess.Engine.Pieces.ChessPieces
             }
         }
 
-        //Wubba Lubba dub-dub
+        public void FindChecks()
+        {
+            foreach (ChessPiece piece in ChessBoard._ChessBoard.PieceList)
+            {
+                if (piece._LegalCaptures.Contains(this))
+                {
+                    Check(piece);
+;               }
+            }
+        }
+
+        //TODO: Wubba Lubba dub-dub
         private void Check(ChessPiece checker, List<Square> emptyFields)
         {
             IsChecked = true;
@@ -414,9 +427,13 @@ namespace Chess.Engine.Pieces.ChessPieces
             CheckCount++;
 
             if (Color == PieceColor.White)
-                ChessGame.CurrentGame.WhiteChecked = true;
+            {
+                ChessGame._CurrentGame.WhiteChecked = true;
+            }                
             else
-                ChessGame.CurrentGame.BlackChecked = true;
+            {
+                ChessGame._CurrentGame.BlackChecked = true;
+            }
 
             if (CheckCount < 2)
             {
@@ -428,6 +445,38 @@ namespace Chess.Engine.Pieces.ChessPieces
 
                         UpdatePieceCaptures(piece, checker);
                         UpdatePieceMovement(piece, emptyFields);
+                    }
+                }
+            }
+        }
+        public void Check(ChessPiece checker)
+        {
+            IsChecked = true;
+            ChessBoard._ChessBoard.CheckMarker.Move(Position);
+
+            CheckCount++;
+
+            if (Color == PieceColor.White)
+            {
+                ChessGame._CurrentGame.WhiteChecked = true;
+            }
+            else
+            {
+                ChessGame._CurrentGame.BlackChecked = true;
+            }
+
+            if (CheckCount < 2)
+            {
+                foreach (ChessPiece piece in ChessBoard._ChessBoard.PieceList)
+                {
+                    if (piece.Color == Color && !piece.IsKing)
+                    {
+                        piece._AllMoves.Clear();
+
+                        UpdatePieceCaptures(piece, checker);
+
+                        piece._LegalMoves.Clear();
+                        piece._AllMoves.Clear();
                     }
                 }
             }

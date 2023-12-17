@@ -50,7 +50,7 @@ namespace Chess.Engine.Board
 
             CurrentVisibility = visibilityState;
 
-            MainWindow.ChessBoard.Children.Add(SelectionGrd);
+            MainWindow._MainWindow.chessBoard.Children.Add(SelectionGrd);
         }
 
         public void SwitchVisibility()

@@ -51,7 +51,7 @@ namespace Chess.Engine.Chess
 
         public void ClearPosition()
         {
-            ChessGame.CurrentGame.FEN = null;
+            ChessGame._CurrentGame.FEN = null;
 
             ChessBoard._ChessBoard.RemoveAllPieces();
         }

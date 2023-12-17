@@ -1,4 +1,5 @@
 ﻿using Chess.Engine.Board;
+using Chess.Engine.CrapFish;
 using Chess.Engine.Pieces;
 using Chess.Engine.Pieces.ChessPieces;
 using System;
@@ -10,6 +11,8 @@ namespace Chess.Engine.Chess
 {
     public class Rules
     {
+        private Evaluator _evaluator = new();
+
         public List<Square> Moves { get; set; }
         public List<Square> OpponentsMoves { get; set; }
         public List<Square> VirtualOpponentsMoves { get; set; }
@@ -19,27 +22,29 @@ namespace Chess.Engine.Chess
         {
             LegalCheckMoves = new();
 
-            if (ChessGame.CurrentGame.WhiteToMove)
+            if (ChessGame._CurrentGame.WhiteToMove)
             {
-                Moves = ChessGame.CurrentGame.RelevantWhiteMoves;
-                OpponentsMoves = ChessGame.CurrentGame.RelevantBlackMoves;
-                VirtualOpponentsMoves = ChessGame.CurrentGame.VirtualBlackMoves;
+                Moves = ChessGame._CurrentGame.RelevantWhiteMoves;
+                OpponentsMoves = ChessGame._CurrentGame.RelevantBlackMoves;
+                VirtualOpponentsMoves = ChessGame._CurrentGame.VirtualBlackMoves;
             }
             else
             {
-                Moves = ChessGame.CurrentGame.RelevantBlackMoves;
-                OpponentsMoves = ChessGame.CurrentGame.RelevantWhiteMoves;
-                VirtualOpponentsMoves = ChessGame.CurrentGame.VirtualWhiteMoves;
+                Moves = ChessGame._CurrentGame.RelevantBlackMoves;
+                OpponentsMoves = ChessGame._CurrentGame.RelevantWhiteMoves;
+                VirtualOpponentsMoves = ChessGame._CurrentGame.VirtualWhiteMoves;
             }
 
-            King king = ChessBoard._ChessBoard.GetKing(ChessGame.CurrentGame.WhiteToMove);
+            King king = ChessBoard._ChessBoard.GetKing(ChessGame._CurrentGame.WhiteToMove);
 
             king.FindPins();
             RestrictKingMovement(king);
 
-            HandleCheckMoves(king);
+            HandleMultiCheckMoves(king);
+            king.FindChecks();
 
             TryEndgame(king);
+            //_evaluator.EvaluatePositions(1);
         }
 
         private void RestrictKingMovement(King king)
@@ -60,7 +65,7 @@ namespace Chess.Engine.Chess
                     }
 
                     //king._AllMoves.Remove(move);
-                    Moves.Remove(move);
+                    //sus Moves.Remove(move);
                 }
             }
    
@@ -86,7 +91,7 @@ namespace Chess.Engine.Chess
             }
         }
 
-        private void HandleCheckMoves(King king)
+        private void HandleMultiCheckMoves(King king)
         {
             if (king.CheckCount > 1)
             {
@@ -98,7 +103,7 @@ namespace Chess.Engine.Chess
                     }
                 }
             }
-        }
+        }        
 
         //TODO: Gameloop
         private void TryEndgame(King king)
@@ -118,20 +123,20 @@ namespace Chess.Engine.Chess
         {
             if (!whiteWon)
             {
-                MainWindow.WinnerLbl.Content = "I have the highround";
+                MainWindow._MainWindow.winnerLbl.Content = "I have the highround";
             }
             else
             {
-                MainWindow.WinnerLbl.Content = "Execute Order 66";
+                MainWindow._MainWindow.winnerLbl.Content = "Execute Order 66";
             }
 
-            MainWindow.WinnerGrd.Visibility = Visibility.Visible;
+            MainWindow._MainWindow.winnerGrd.Visibility = Visibility.Visible;
         }
 
         private void Remis()
         {
-            MainWindow.WinnerLbl.Content = "Remis";
-            MainWindow.WinnerGrd.Visibility = Visibility.Visible;
+            MainWindow._MainWindow.winnerLbl.Content = "Remis";
+            MainWindow._MainWindow.winnerGrd.Visibility = Visibility.Visible;
         }
     }
 }

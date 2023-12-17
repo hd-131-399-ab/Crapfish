@@ -53,7 +53,7 @@ namespace Chess.Engine.Board
             Grid.SetRow(square, position.Row);
             Grid.SetColumn(square, position.Column);
 
-            MainWindow.ChessBoard.Children.Add(square);
+            MainWindow._MainWindow.chessBoard.Children.Add(square);
         }
     }
 }

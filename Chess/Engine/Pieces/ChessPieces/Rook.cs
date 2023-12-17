@@ -53,7 +53,7 @@ namespace Chess.Engine.Pieces.ChessPieces
 
             piece.MouseUp += OnChessPiece_MouseUp;
 
-            MainWindow.ChessBoard.Children.Add(piece);
+            MainWindow._MainWindow.chessBoard.Children.Add(piece);
 
             return piece;
         }
@@ -67,9 +67,9 @@ namespace Chess.Engine.Pieces.ChessPieces
             CalculateStraightMoves();
 
             if (Color == PieceColor.White)
-                ChessGame.CurrentGame.VirtualWhiteMoves.AddRange(VirtualMoves);
+                ChessGame._CurrentGame.VirtualWhiteMoves.AddRange(VirtualMoves);
             else
-                ChessGame.CurrentGame.VirtualBlackMoves.AddRange(VirtualMoves);
+                ChessGame._CurrentGame.VirtualBlackMoves.AddRange(VirtualMoves);
 
             return _AllMoves;
         }

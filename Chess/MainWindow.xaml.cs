@@ -8,12 +8,14 @@ namespace Chess
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow _MainWindow;
+
         public MainWindow()
         {
             //Widmung: Magerquark_kls <= 10€
 
             InitializeComponent();
-            InitializePMV();
+            _MainWindow = this;
 
             ChessGame chessGame = new("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", ChessGame.GameMode.LocalMultiplayer);
         }
@@ -25,5 +27,4 @@ namespace Chess
 
 //3549 lines : 17.409,51€
 //4102 lines (1.364,60g): 20.468,98€
-
-// for <
+//M + KG6
