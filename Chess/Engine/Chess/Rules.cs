@@ -15,6 +15,7 @@ namespace Chess.Engine.Chess
 
         public List<Square> Moves { get; set; }
         public List<Square> OpponentsMoves { get; set; }
+        public List<Square> OpponentsPawnCaptures { get; set; }
         public List<Square> VirtualOpponentsMoves { get; set; }
         public List<Square> LegalCheckMoves { get; set; }
 
@@ -34,7 +35,8 @@ namespace Chess.Engine.Chess
                 OpponentsMoves = ChessGame._CurrentGame.RelevantWhiteMoves;
                 VirtualOpponentsMoves = ChessGame._CurrentGame.VirtualWhiteMoves;
             }
-
+            OpponentsPawnCaptures = ChessGame._CurrentGame.OpponentPawnCaptures;
+            
             King king = ChessBoard._ChessBoard.GetKing(ChessGame._CurrentGame.WhiteToMove);
 
             king.FindPins();
@@ -50,8 +52,8 @@ namespace Chess.Engine.Chess
         private void RestrictKingMovement(King king)
         {
             foreach (Square move in king._AllMoves)
-            {
-                if (OpponentsMoves.Contains(move) || VirtualOpponentsMoves.Contains(move))
+            {                
+                if (OpponentsMoves.Contains(move) || VirtualOpponentsMoves.Contains(move) || OpponentsPawnCaptures.Contains(move))
                 {
                     ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(move);
 

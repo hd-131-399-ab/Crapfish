@@ -14,16 +14,16 @@ namespace Chess.Engine.Pieces.ChessPieces
         public List<CastleMove> _CastleMoves { get; set; } = new();
 
         #region Vectors
-        static Vector _UpLeft = new(-1, -1);
-        static Vector _Up = new(0, -1);
-        static Vector _UpRight = new(1, -1);
+        static Square _UpLeft = new(-1, -1);
+        static Square _Up = new(0, -1);
+        static Square _UpRight = new(1, -1);
 
-        static Vector _Right = new(1, 0);
-        static Vector _RightDown = new(1, 1);
+        static Square _Right = new(1, 0);
+        static Square _RightDown = new(1, 1);
 
-        static Vector _Down = new(0, 1);
-        static Vector _DownLeft = new(-1, 1);
-        static Vector _Left = new(-1, 0);
+        static Square _Down = new(0, 1);
+        static Square _DownLeft = new(-1, 1);
+        static Square _Left = new(-1, 0);
         #endregion
 
         public bool IsChecked { get; set; }
@@ -83,8 +83,8 @@ namespace Chess.Engine.Pieces.ChessPieces
                 piece.Source = new BitmapImage(new Uri(@"Mats/_king.png", UriKind.Relative));
             }
 
-            Grid.SetRow(piece, Position.Row);
-            Grid.SetColumn(piece, Position.Column);
+            Grid.SetRow(piece, Position.Y);
+            Grid.SetColumn(piece, Position.X);
 
             piece.MouseUp += OnChessPiece_MouseUp;
 
@@ -139,10 +139,10 @@ namespace Chess.Engine.Pieces.ChessPieces
             HandlePieceInformation(_Left);
         }
 
-        private void HandlePieceInformation(Vector vector)
+        private void HandlePieceInformation(Square vector)
         {
-            int row = Position.Row + (int)vector.Y;
-            int column = Position.Column + (int)vector.X;
+            int row = Position.Y + (int)vector.Y;
+            int column = Position.X + (int)vector.X;
 
             if (row is > -1 and < 8 && column is > -1 and < 8)
             {
@@ -205,12 +205,12 @@ namespace Chess.Engine.Pieces.ChessPieces
             {
                 Rook r = (Rook)rook;
 
-                int column = Position.Column;
+                int column = Position.X;
                 --column;
 
                 for (int i = column; i > 0; i--)
                 {
-                    ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(new Square(rookPos.Row, i));
+                    ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(new Square(rookPos.Y, i));
 
                     if (piece != null)
                         return;
@@ -236,9 +236,9 @@ namespace Chess.Engine.Pieces.ChessPieces
             // Pin to the left
             _emptySquares.Clear();
             _pieceInWay = null;
-            for (int i = Position.Column - 1; i > -1; i--)
+            for (int i = Position.X - 1; i > -1; i--)
             {
-                if (!PinPosition(new(Position.Row, i), new() { "r", "q" }))
+                if (!PinPosition(new(Position.Y, i), new() { "r", "q" }))
                 {
                     break;
                 }
@@ -247,9 +247,9 @@ namespace Chess.Engine.Pieces.ChessPieces
             // Pin to the right
             _emptySquares.Clear();
             _pieceInWay = null;
-            for (int i = Position.Column + 1; i < 8; i++)
+            for (int i = Position.X + 1; i < 8; i++)
             {
-                if (!PinPosition(new(Position.Row, i), new() { "r", "q" }))
+                if (!PinPosition(new(Position.Y, i), new() { "r", "q" }))
                 {
                     break;
                 }
@@ -258,9 +258,9 @@ namespace Chess.Engine.Pieces.ChessPieces
             // Pin up
             _emptySquares.Clear();
             _pieceInWay = null;
-            for (int i = Position.Row - 1; i > -1; i--)
+            for (int i = Position.Y - 1; i > -1; i--)
             {
-                if (!PinPosition(new(i, Position.Column), new() { "r", "q" }))
+                if (!PinPosition(new(i, Position.X), new() { "r", "q" }))
                 {
                     break;
                 }
@@ -269,9 +269,9 @@ namespace Chess.Engine.Pieces.ChessPieces
             // Pin down
             _emptySquares.Clear();
             _pieceInWay = null;
-            for (int i = Position.Row + 1; i < 8; i++)
+            for (int i = Position.Y + 1; i < 8; i++)
             {
-                if (!PinPosition(new(i, Position.Column), new() { "r", "q" }))
+                if (!PinPosition(new(i, Position.X), new() { "r", "q" }))
                 {
                     break;
                 }
@@ -281,12 +281,12 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         private void FindDiagonalPins()
         {
-            int row = Position.Row;
+            int row = Position.Y;
 
             //LeftDown
             _emptySquares.Clear();
             _pieceInWay = null;
-            for (int i = Position.Column - 1; i > -1; i--)
+            for (int i = Position.X - 1; i > -1; i--)
             {
                 if (!PinPosition(new(++row, i), new() { "q", "b" }))
                 {
@@ -295,10 +295,10 @@ namespace Chess.Engine.Pieces.ChessPieces
             }
 
             //RightUp
-            row = Position.Row;
+            row = Position.Y;
             _emptySquares.Clear();
             _pieceInWay = null;
-            for (int i = Position.Column + 1; i < 8; i++)
+            for (int i = Position.X + 1; i < 8; i++)
             {                
                 if (!PinPosition(new(--row, i), new() { "q", "b" }))
                 {
@@ -307,10 +307,10 @@ namespace Chess.Engine.Pieces.ChessPieces
             }
 
             //LeftUp
-            row = Position.Row;
+            row = Position.Y;
             _emptySquares.Clear();
             _pieceInWay = null;
-            for (int i = Position.Column - 1; i > -1; i--)
+            for (int i = Position.X - 1; i > -1; i--)
             {
                 if (!PinPosition(new(--row, i), new() { "q", "b" }))
                 {
@@ -319,10 +319,10 @@ namespace Chess.Engine.Pieces.ChessPieces
             }
 
             //RightDown
-            row = Position.Row;
+            row = Position.Y;
             _emptySquares.Clear();
             _pieceInWay = null;
-            for (int i = Position.Column + 1; i < 8; i++)
+            for (int i = Position.X + 1; i < 8; i++)
             {
                 if (!PinPosition(new(++row, i), new() { "q", "b" }))
                 {

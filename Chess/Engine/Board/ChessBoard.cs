@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Chess.Engine.Chess;
 using Chess.Engine.Pieces;
 using Chess.Engine.Pieces.ChessPieces;
 
@@ -10,7 +12,7 @@ namespace Chess.Engine.Board
         public static ChessBoard _ChessBoard;
 
         public ChessPiece[,] Pieces { get; set; } = new ChessPiece[8, 8];
-        public List<ChessPiece> PieceList { get; set;  } = new();
+        public List<ChessPiece> PieceList { get; set; } = new();
 
         public ChessPiece SelectedPiece { get; set; }
         public SelectionGrid SelectionGrd { get; set; } = new();
@@ -34,14 +36,24 @@ namespace Chess.Engine.Board
             { 'K', typeof(King) },
             { 'P', typeof(Pawn) }
         };
-        
-        public ChessPiece GetPieceAt(Square position) => Pieces[position.Row, position.Column];
+
+        public ChessPiece GetPieceAt(Square position)
+        {
+            try
+            {
+                return Pieces[position.Y, position.X];
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public ChessPiece AddChessPiece(char fEN, ChessPiece.PieceColor color, Square position)
         {
             ChessPiece piece = Activator.CreateInstance(FENAssignment[fEN], position, color) as ChessPiece;
  
-            Pieces[position.Row, position.Column] = piece;
+            Pieces[position.Y, position.X] = piece;
             PieceList.Add(piece);
 
             return piece;
@@ -78,8 +90,8 @@ namespace Chess.Engine.Board
 
         public void SetPieceToSquare(ChessPiece piece, Square destinationSquare)
         {
-            Pieces[piece.Position.Row, piece.Position.Column] = null;
-            Pieces[destinationSquare.Row, destinationSquare.Column] = piece;
+            Pieces[piece.Position.Y, piece.Position.X] = null;
+            Pieces[destinationSquare.Y, destinationSquare.X] = piece;
         }
 
         public void RemovePieceAt(Square position)
@@ -89,7 +101,7 @@ namespace Chess.Engine.Board
             MainWindow._MainWindow.chessBoard.Children.Remove(piece.Piece);
 
             PieceList.Remove(piece);
-            Pieces[position.Row, position.Column] = null;
+            Pieces[position.Y, position.X] = null;
         }
 
         public void RemoveAllPieces()
@@ -103,10 +115,11 @@ namespace Chess.Engine.Board
             Pieces = new ChessPiece[8, 8];
         }
 
-        public void GetEveryMove(out List<Square> whiteMoves, out List<Square> blackMoves)
+        public void GetEveryMove(out List<Square> whiteMoves, out List<Square> blackMoves, out List<Square> opponentPawnCaptures)
         {
             whiteMoves = new();
             blackMoves = new();
+            opponentPawnCaptures = new();
 
             King whiteKing = null;
             King blackKing = null;
@@ -120,21 +133,36 @@ namespace Chess.Engine.Board
                     else
                         blackKing = (King)piece;
                 }
+                else if (piece is Pawn pawn)
+                {
+                    pawn.CalculateLegalMoves();
+                    opponentPawnCaptures.AddRange(pawn.CapturePositions);
+                }
+
+                if (piece.Color == ChessPiece.PieceColor.White)
+                {
+                    whiteMoves.AddRange(piece.CalculateLegalMoves());
+                }
                 else
                 {
-                    if (piece.Color == ChessPiece.PieceColor.White)
-                    {
-                        whiteMoves.AddRange(piece.CalculateLegalMoves());
-                    }
-                    else
-                    {
-                        blackMoves.AddRange(piece.CalculateLegalMoves());
-                    }
+                    blackMoves.AddRange(piece.CalculateLegalMoves());
                 }
             }
 
             whiteMoves.AddRange(whiteKing.CalculateLegalMoves());
             blackMoves.AddRange(blackKing.CalculateLegalMoves());
+        }
+
+        public bool ColorToBool(ChessPiece.PieceColor color)
+        {
+            if (color == ChessPiece.PieceColor.White)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

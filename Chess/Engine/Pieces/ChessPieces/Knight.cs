@@ -9,17 +9,17 @@ namespace Chess.Engine.Pieces.ChessPieces
     public class Knight : ChessPiece
     {
         #region Vectors
-        static Vector _rightUp = new(2, 1);
-        static Vector _rightDown = new(2, -1);
+        static Square _rightUp = new(2, 1);
+        static Square _rightDown = new(2, -1);
 
-        static Vector _leftUp = new(-2, 1);
-        static Vector _leftDown = new(-2, -1);
+        static Square _leftUp = new(-2, 1);
+        static Square _leftDown = new(-2, -1);
 
-        static Vector _upLeft = new(-1, 2);
-        static Vector _upRight = new(1, 2);
+        static Square _upLeft = new(-1, 2);
+        static Square _upRight = new(1, 2);
 
-        static Vector _downLeft = new(-1, -2);
-        static Vector _downRight = new(1, -2);
+        static Square _downLeft = new(-1, -2);
+        static Square _downRight = new(1, -2);
         #endregion
 
         public Knight(Square position, PieceColor pieceColor)
@@ -62,8 +62,8 @@ namespace Chess.Engine.Pieces.ChessPieces
                 piece.Source = new BitmapImage(new Uri(@"Mats/_knight.png", UriKind.Relative));
             }
 
-            Grid.SetRow(piece, Position.Row);
-            Grid.SetColumn(piece, Position.Column);
+            Grid.SetRow(piece, Position.Y);
+            Grid.SetColumn(piece, Position.X);
 
             piece.MouseUp += OnChessPiece_MouseUp;
 
@@ -98,10 +98,10 @@ namespace Chess.Engine.Pieces.ChessPieces
             HandlePieceInformation(_leftDown);
         }
 
-        private void HandlePieceInformation(Vector vector)
+        private void HandlePieceInformation(Square vector)
         {
-            int row = Position.Row + (int)vector.Y;
-            int column = Position.Column + (int)vector.X;
+            int row = Position.Y + (int)vector.Y;
+            int column = Position.X + (int)vector.X;
 
             if (row is > -1 and < 8 && column is > -1 and < 8)
             {

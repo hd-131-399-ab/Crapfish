@@ -12,15 +12,15 @@ namespace Chess.Engine.Pieces
         internal abstract List<Square> CalculateAllLegalMoves();
 
         #region Vecors
-        static Vector _Left = new(-1, 0);
-        static Vector _Right = new(1, 0);
-        static Vector _Up = new(0, -1);
-        static Vector _Down = new(0, 1);
+        static Square _Left = new(-1, 0);
+        static Square _Right = new(1, 0);
+        static Square _Up = new(0, -1);
+        static Square _Down = new(0, 1);
 
-        static Vector _LeftDown = new(-1, 1);
-        static Vector _RightUp = new(1, -1);
-        static Vector _LeftUp = new(-1, -1);
-        static Vector _RightDown = new(1, 1);
+        static Square _LeftDown = new(-1, 1);
+        static Square _RightUp = new(1, -1);
+        static Square _LeftUp = new(-1, -1);
+        static Square _RightDown = new(1, 1);
         #endregion
 
         protected void CalculateStraightMoves()
@@ -44,10 +44,10 @@ namespace Chess.Engine.Pieces
         }
 
         private bool _nextMoveIsVirtual { get; set; }
-        protected void CalculateLine(Vector vector)
+        protected void CalculateLine(Square vector)
         {
-            int newRow = Position.Row;
-            int newColumn = Position.Column;
+            int newRow = Position.Y;
+            int newColumn = Position.X;
 
             for (int i = 0; i < 7; i++)
             {

@@ -46,8 +46,8 @@ namespace Chess.Engine.Board
 
             moveGrid.MouseUp += OnMoveGrid_MouseUp;
 
-            Grid.SetRow(moveGrid, Position.Row);
-            Grid.SetColumn(moveGrid, Position.Column);
+            Grid.SetRow(moveGrid, Position.Y);
+            Grid.SetColumn(moveGrid, Position.X);
 
             MoveGrd = moveGrid;
 
@@ -85,11 +85,11 @@ namespace Chess.Engine.Board
 
             if (piece is Pawn pawn)
             {
-                if (piece.Color == ChessPiece.PieceColor.White && Position.Row == piece.Position.Row - 2)
+                if (piece.Color == ChessPiece.PieceColor.White && Position.Y == piece.Position.Y - 2)
                 {
                     pawn.DoublePushedLastTurn = true;
                 }
-                else if (piece.Color == ChessPiece.PieceColor.Black && Position.Row == piece.Position.Row + 2)
+                else if (piece.Color == ChessPiece.PieceColor.Black && Position.Y == piece.Position.Y + 2)
                 {
                     pawn.DoublePushedLastTurn = true;
                 }

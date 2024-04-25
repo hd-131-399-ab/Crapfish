@@ -22,8 +22,8 @@ namespace Chess.Engine.Pieces
                 {
                     ChessBoard._ChessBoard.SetPieceToSquare(this, value);
 
-                    Grid.SetRow(Piece, value.Row);
-                    Grid.SetColumn(Piece, value.Column);
+                    Grid.SetRow(Piece, value.Y);
+                    Grid.SetColumn(Piece, value.X);
                 }
 
                 _Position = value;

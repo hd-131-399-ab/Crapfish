@@ -24,22 +24,26 @@ namespace Chess.Engine.Chess
         public CastleRights BlackCastleRights { get; set; } = CastleRights.KingQueen;
 
 
-        public List<Square> LegalWhiteMoves = new();
-        public List<Square> RelevantWhiteMoves => LegalWhiteMoves.Distinct().ToList();
-        public List<Square> VirtualWhiteMoves { get; set; } = new();
+        public List<Board.Square> LegalWhiteMoves = new();
+        public List<Board.Square> RelevantWhiteMoves => LegalWhiteMoves.Distinct().ToList();
+        public List<Board.Square> VirtualWhiteMoves { get; set; } = new();
 
 
-        public List<Square> LegalBlackMoves = new();
-        public List<Square> RelevantBlackMoves => LegalBlackMoves.Distinct().ToList();
-        public List<Square> VirtualBlackMoves { get; set; } = new();
+        public List<Board.Square> LegalBlackMoves = new();
+        public List<Board.Square> OpponentPawnCaptures = new();
+        public List<Board.Square> RelevantBlackMoves => LegalBlackMoves.Distinct().ToList();
+        public List<Board.Square> VirtualBlackMoves { get; set; } = new();
         
         public string FEN { get; set; }
 
-        public bool WhiteToMove = true;
+        public bool WhiteToMove = false;
 
         public ChessGame(string fEN, GameMode gameMode)
         {
             _CurrentGame = this;
+            LegalWhiteMoves = new();
+            LegalBlackMoves = new();
+
             CurrentGameMode = gameMode;
 
             ChessBoard._ChessBoard = new();
@@ -58,7 +62,7 @@ namespace Chess.Engine.Chess
             //FEN = "r5/8/1b2QR/B5r/8/p2P3N/1k2K/8";
 
             //en pasant
-            //FEN = "k2K/8/8/8/p1p1p1p1/8/PPPPPPPP/8";
+            FEN = "k2K/8/8/8/p1p1p1p1/8/PPPPPPPP/8";
 
             //mate
             //FEN = "K/4rr/8/8/8/8/7k";
@@ -70,7 +74,8 @@ namespace Chess.Engine.Chess
             //FEN = "8/8/8/8/Rrb3K/1k/8/4R";
 
             //easy check
-            FEN = "N5BB/1k/3PPPP/4QQ/4RRK/8/8/2rrbbpq";
+            //FEN = "3k2BB/8/3PPPP/4QQ/4RRK/8/8/2rrbbpq";
+            WhiteToMove = true;
 
             new BoardMaker("#909090", "#505050");
 
@@ -90,7 +95,7 @@ namespace Chess.Engine.Chess
 
             HandlePieceMovement(WhiteToMove);
 
-            ChessBoard._ChessBoard.GetEveryMove(out LegalWhiteMoves, out LegalBlackMoves);
+            ChessBoard._ChessBoard.GetEveryMove(out LegalWhiteMoves, out LegalBlackMoves, out OpponentPawnCaptures);
 
             _rules.OnMovesSwitched();
         }
@@ -125,7 +130,7 @@ namespace Chess.Engine.Chess
         {            
             HandlePieceMovement(WhiteToMove);
 
-            ChessBoard._ChessBoard.GetEveryMove(out LegalWhiteMoves, out LegalBlackMoves);
+            ChessBoard._ChessBoard.GetEveryMove(out LegalWhiteMoves, out LegalBlackMoves, out OpponentPawnCaptures);
             ChessBoard._ChessBoard.SelectionGrd.SwitchVisibility();
         }
 

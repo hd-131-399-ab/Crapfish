@@ -50,8 +50,8 @@ namespace Chess.Engine.Board
                 square.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(_blackHex);
             }
 
-            Grid.SetRow(square, position.Row);
-            Grid.SetColumn(square, position.Column);
+            Grid.SetRow(square, position.Y);
+            Grid.SetColumn(square, position.X);
 
             MainWindow._MainWindow.chessBoard.Children.Add(square);
         }
