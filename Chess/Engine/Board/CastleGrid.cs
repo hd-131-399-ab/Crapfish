@@ -36,8 +36,8 @@ namespace Chess.Engine.Board
 
             castleGrid.MouseUp += OnCastleGrid_MouseUp;
 
-            Grid.SetRow(castleGrid, Position.Y);
-            Grid.SetColumn(castleGrid, Position.X);
+            Grid.SetRow(castleGrid, Position.Row);
+            Grid.SetColumn(castleGrid, Position.Column);
 
             CastleGrd = castleGrid;
 

@@ -46,13 +46,13 @@ namespace Chess.Engine.Pieces
         private bool _nextMoveIsVirtual { get; set; }
         protected void CalculateLine(Square vector)
         {
-            int newRow = Position.Y;
-            int newColumn = Position.X;
+            int newRow = Position.Row;
+            int newColumn = Position.Column;
 
             for (int i = 0; i < 7; i++)
             {
-                newRow = newRow + (int)vector.Y;
-                newColumn = newColumn + (int)vector.X;
+                newRow = newRow + (int)vector.Row;
+                newColumn = newColumn + (int)vector.Column;
 
                 if (newRow is > -1 and < 8 && newColumn is > -1  and < 8)
                 {

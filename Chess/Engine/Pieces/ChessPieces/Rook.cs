@@ -48,8 +48,8 @@ namespace Chess.Engine.Pieces.ChessPieces
                 piece.Source = new BitmapImage(new Uri(@"Mats/_rook.png", UriKind.Relative));
             }
 
-            Grid.SetRow(piece, Position.Y);
-            Grid.SetColumn(piece, Position.X);
+            Grid.SetRow(piece, Position.Row);
+            Grid.SetColumn(piece, Position.Column);
 
             piece.MouseUp += OnChessPiece_MouseUp;
 

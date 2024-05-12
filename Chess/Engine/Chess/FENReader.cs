@@ -17,8 +17,8 @@ namespace Chess.Engine.Chess
             {
                 if (fENType == '/')
                 {
-                    position.Y++;
-                    position.X = 0;
+                    position.Row++;
+                    position.Column = 0;
                 }
                 else
                 {
@@ -26,12 +26,12 @@ namespace Chess.Engine.Chess
 
                     if (int.TryParse(fENType.ToString(), out fENNum))
                     {
-                        position.X += fENNum;
+                        position.Column += fENNum;
                     }
                     else
                     {
                         ChessBoard._ChessBoard.AddChessPiece(fENType, GetColorFromFenType(fENType), position);
-                        position.X++;
+                        position.Column++;
                     }
                 }
             }

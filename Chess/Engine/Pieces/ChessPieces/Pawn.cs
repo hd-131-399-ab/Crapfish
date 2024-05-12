@@ -17,12 +17,12 @@ namespace Chess.Engine.Pieces.ChessPieces
         public Square _EnPassantPosition { get; set; }
 
         #region Vectors
-        static Square _up = new(1, 0);
         static Square _doubleUp = new(2, 0);
         static Square _rightUp = new(1, 1);
-        static Square _leftUp = new(-1, 1);
-        static Square _right = new(1, 0);
-        static Square _left = new(-1, 0);
+        static Square _leftUp = new(1, -1);
+        static Square _right = new(0, 1);
+        static Square _left = new(0, -1);
+        static Square _up = new(1, 0);
         #endregion
 
         public Pawn(Square position, PieceColor pieceColor)
@@ -60,8 +60,8 @@ namespace Chess.Engine.Pieces.ChessPieces
                 piece.Source = new BitmapImage(new Uri(@"Mats/_pawn.png", UriKind.Relative));
             }
 
-            Grid.SetRow(piece, Position.Y);
-            Grid.SetColumn(piece, Position.X);
+            Grid.SetRow(piece, Position.Row);
+            Grid.SetColumn(piece, Position.Column);
 
             piece.MouseUp += OnChessPiece_MouseUp;
 
@@ -90,16 +90,21 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         private void CalculatePawnMoves()
         {
+            if (Position.Column == 0 && Position.Row == 4)
+            {
+
+            }
+
             AdjustMoveVectors(PieceColor.White);
             HandlePieceInformation(_up, false);
             
-            if (!Moved)
+            if (!Moved) //TODO: WTF!
             {
-                if (Color == PieceColor.White && Position.Y == 6)
+                if (Color == PieceColor.White && Position.Row == 6)
                 {
                     HandlePieceInformation(_doubleUp, false);
                 }
-                else if (Color == PieceColor.Black && Position.Y == 1)
+                else if (Color == PieceColor.Black && Position.Row == 1)
                 {
                     HandlePieceInformation(_doubleUp, false);
                 }
@@ -116,29 +121,29 @@ namespace Chess.Engine.Pieces.ChessPieces
         {
             if (Color == PieceColor.White)
             {
-                _up.Y = -1;
-                _doubleUp.Y = -2;
-                _rightUp.Y = -1;
-                _leftUp.Y = -1;
+                _up.Row = -1;
+                _doubleUp.Row = -2;
+                _rightUp.Row = -1;
+                _leftUp.Row = -1;
             }
             else
             {
-                _up.Y = 1;
-                _doubleUp.Y = 2;
-                _rightUp.Y = 1;
-                _leftUp.Y = 1;
+                _up.Row = 1;
+                _doubleUp.Row = 2;
+                _rightUp.Row = 1;
+                _leftUp.Row = 1;
             }
         }
         
         private void HandlePieceInformation(Square vector, bool capture)
         {
-            ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Y + vector.Y, Position.X + vector.X));
+            ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Row + vector.Row, Position.Column + vector.Column));
 
             if (piece == null)
             {
                 if (!capture)
                 {
-                    Square position = new(Position.Y + vector.Y, Position.X + vector.X);
+                    Square position = new(Position.Row + vector.Row, Position.Column + vector.Column);
 
                     _LegalMoves.Add(position);
                     _AllMoves.Add(position);
@@ -161,20 +166,20 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         private void CalculateEnPassantMoves(Square vector)
         {
-            ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Y + vector.Y, Position.X + vector.X));
+            ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Row + vector.Row, Position.Column + vector.Column));//1 0
 
             //TODO: ERROR?
             if (piece is Pawn pawn && piece.Color != Color)
             {
                 //blockingPiece
-                ChessPiece pieceToCapture = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Y + _up.Y, Position.X + vector.X));
+                ChessPiece blockingPiece = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Row + _up.Row, Position.Column + vector.Column));
 
                 //TODO: War != null
-                if (pieceToCapture != null && pawn.DoublePushedLastTurn)
+                if (blockingPiece == null && pawn.DoublePushedLastTurn)
                 {
                     _EnPassantCapture = piece;
-                    _EnPassantPosition = new Square(Position.Y + _up.Y, Position.X + vector.X);
-                    _AllMoves.Add(new Square(piece.Position.Y + _up.Y, piece.Position.X + vector.X));
+                    _EnPassantPosition = new Square(Position.Row + _up.Row, Position.Column + vector.Column);
+                    _AllMoves.Add(new Square(piece.Position.Row + _up.Row, piece.Position.Column + vector.Column));
                 }
             }
         }
@@ -183,7 +188,7 @@ namespace Chess.Engine.Pieces.ChessPieces
         {
             if (Color == PieceColor.White)
             {
-                if (Position.Y == 1)
+                if (Position.Row == 1)
                 {
                     ChessBoard._ChessBoard.RemovePieceAt(Position);
 
@@ -192,7 +197,7 @@ namespace Chess.Engine.Pieces.ChessPieces
                         ChessGame._CurrentGame.LegalWhiteMoves.Remove(move);
                     }
 
-                    ChessPiece queen = ChessBoard._ChessBoard.AddChessPiece('Q', PieceColor.White, new Square(Position.Y-1, Position.X));
+                    ChessPiece queen = ChessBoard._ChessBoard.AddChessPiece('Q', PieceColor.White, new Square(Position.Row-1, Position.Column));
                     
                     ChessGame._CurrentGame.LegalWhiteMoves.AddRange(queen.CalculateLegalMoves());
                     return queen;
@@ -200,7 +205,7 @@ namespace Chess.Engine.Pieces.ChessPieces
             }
             else
             {
-                if (Position.Y == 6)
+                if (Position.Row == 6)
                 {
                     ChessBoard._ChessBoard.RemovePieceAt(Position);
                     
@@ -209,7 +214,7 @@ namespace Chess.Engine.Pieces.ChessPieces
                         ChessGame._CurrentGame.LegalBlackMoves.Remove(move);
                     }
 
-                    ChessPiece queen = ChessBoard._ChessBoard.AddChessPiece('q', PieceColor.Black, new Square(Position.Y + 1, Position.X));
+                    ChessPiece queen = ChessBoard._ChessBoard.AddChessPiece('q', PieceColor.Black, new Square(Position.Row + 1, Position.Column));
                     ChessGame._CurrentGame.LegalBlackMoves.AddRange(queen.CalculateLegalMoves());
                     return queen;
                 }

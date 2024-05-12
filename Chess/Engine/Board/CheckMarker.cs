@@ -46,8 +46,8 @@ namespace Chess.Engine.Board
 
             set
             {
-                Grid.SetRow(CheckMrker, value.Y);
-                Grid.SetColumn(CheckMrker, value.X);
+                Grid.SetRow(CheckMrker, value.Row);
+                Grid.SetColumn(CheckMrker, value.Column);
 
                 _Position = value;
             }

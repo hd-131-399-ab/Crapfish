@@ -62,8 +62,8 @@ namespace Chess.Engine.Pieces.ChessPieces
                 piece.Source = new BitmapImage(new Uri(@"Mats/_knight.png", UriKind.Relative));
             }
 
-            Grid.SetRow(piece, Position.Y);
-            Grid.SetColumn(piece, Position.X);
+            Grid.SetRow(piece, Position.Row);
+            Grid.SetColumn(piece, Position.Column);
 
             piece.MouseUp += OnChessPiece_MouseUp;
 
@@ -100,8 +100,8 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         private void HandlePieceInformation(Square vector)
         {
-            int row = Position.Y + (int)vector.Y;
-            int column = Position.X + (int)vector.X;
+            int row = Position.Row + (int)vector.Row;
+            int column = Position.Column + (int)vector.Column;
 
             if (row is > -1 and < 8 && column is > -1 and < 8)
             {

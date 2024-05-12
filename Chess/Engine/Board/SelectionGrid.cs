@@ -17,8 +17,8 @@ namespace Chess.Engine.Board
 
             set
             {
-                Grid.SetRow(SelectionGrd, value.Y);
-                Grid.SetColumn(SelectionGrd, value.X);
+                Grid.SetRow(SelectionGrd, value.Row);
+                Grid.SetColumn(SelectionGrd, value.Column);
 
                 _Position = value;
             }

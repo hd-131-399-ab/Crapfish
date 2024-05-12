@@ -41,7 +41,7 @@ namespace Chess.Engine.Board
         {
             try
             {
-                return Pieces[position.Y, position.X];
+                return Pieces[position.Row, position.Column];
             }
             catch
             {
@@ -53,7 +53,7 @@ namespace Chess.Engine.Board
         {
             ChessPiece piece = Activator.CreateInstance(FENAssignment[fEN], position, color) as ChessPiece;
  
-            Pieces[position.Y, position.X] = piece;
+            Pieces[position.Row, position.Column] = piece;
             PieceList.Add(piece);
 
             return piece;
@@ -90,8 +90,8 @@ namespace Chess.Engine.Board
 
         public void SetPieceToSquare(ChessPiece piece, Square destinationSquare)
         {
-            Pieces[piece.Position.Y, piece.Position.X] = null;
-            Pieces[destinationSquare.Y, destinationSquare.X] = piece;
+            Pieces[piece.Position.Row, piece.Position.Column] = null;
+            Pieces[destinationSquare.Row, destinationSquare.Column] = piece;
         }
 
         public void RemovePieceAt(Square position)
@@ -101,7 +101,7 @@ namespace Chess.Engine.Board
             MainWindow._MainWindow.chessBoard.Children.Remove(piece.Piece);
 
             PieceList.Remove(piece);
-            Pieces[position.Y, position.X] = null;
+            Pieces[position.Row, position.Column] = null;
         }
 
         public void RemoveAllPieces()
