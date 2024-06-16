@@ -90,15 +90,10 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         private void CalculatePawnMoves()
         {
-            if (Position.Column == 0 && Position.Row == 4)
-            {
-
-            }
-
             AdjustMoveVectors(PieceColor.White);
             HandlePieceInformation(_up, false);
             
-            if (!Moved) //TODO: WTF!
+            if (!Moved)
             {
                 if (Color == PieceColor.White && Position.Row == 6)
                 {

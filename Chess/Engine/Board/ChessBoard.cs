@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Chess.Engine.Chess;
-using Chess.Engine.Pieces;
+﻿using Chess.Engine.Pieces;
 using Chess.Engine.Pieces.ChessPieces;
+using System;
+using System.Collections.Generic;
 
 namespace Chess.Engine.Board
 {
