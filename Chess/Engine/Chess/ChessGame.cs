@@ -61,8 +61,8 @@ namespace Chess.Engine.Chess
             //mixed
             //FEN = "r5/8/1b2QR/B5r/8/p2P3N/1k2K/8";
 
-            //en pasant
-            FEN = "k2K/8/8/8/p1p1p1p1/8/PPPPPPPP/8";
+            //en passant
+            //FEN = "k2K/8/8/8/p1p1p1p1/8/PPPPPPPP/8";
 
             //mate
             //FEN = "K/4rr/8/8/8/8/7k";

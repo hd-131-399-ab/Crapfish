@@ -71,6 +71,7 @@ namespace Chess.Engine.Board
 
             return king;
         }
+
         public King GetKing(ChessPiece.PieceColor kingColor)
         {
             King king = null;
@@ -127,9 +128,13 @@ namespace Chess.Engine.Board
                 if (piece.IsKing)
                 {
                     if (piece.Color == ChessPiece.PieceColor.White)
+                    {
                         whiteKing = (King)piece;
+                    }
                     else
+                    {
                         blackKing = (King)piece;
+                    }
                 }
                 else if (piece is Pawn pawn)
                 {

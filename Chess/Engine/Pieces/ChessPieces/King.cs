@@ -141,8 +141,8 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         private void HandlePieceInformation(Square vector)
         {
-            int row = Position.Row + (int)vector.Row;
-            int column = Position.Column + (int)vector.Column;
+            int row = Position.Row + vector.Row;
+            int column = Position.Column + vector.Column;
 
             if (row is > -1 and < 8 && column is > -1 and < 8)
             {
@@ -192,8 +192,10 @@ namespace Chess.Engine.Pieces.ChessPieces
             }
 
             if (Moved)
+            {
                 return false;
-
+            }
+  
             return true;
         }
 
