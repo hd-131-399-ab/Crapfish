@@ -9,17 +9,15 @@ namespace Chess.Engine.Pieces.ChessPieces
 {
     public class Pawn : ChessPiece
     {
-        public List<Square> CapturePositions { get; set; } = new();
-
         public bool DoublePushedLastTurn { get; set; } = false;
 
         public ChessPiece _EnPassantCapture { get; set; } = null;
         public Square _EnPassantPosition { get; set; }
 
         #region Vectors
-        static Square _doubleUp = new(2, 0);
-        static Square _rightUp = new(1, 1);
-        static Square _leftUp = new(1, -1);
+        static Square _doubleUp = new(0, 0);
+        static Square _rightUp = new(0, 1);
+        static Square _leftUp = new(0, -1);
         static Square _right = new(0, 1);
         static Square _left = new(0, -1);
         static Square _up = new(1, 0);
@@ -83,30 +81,21 @@ namespace Chess.Engine.Pieces.ChessPieces
             }
 
             CalculatePawnMoves();
-            CapturePositions.Add(Square.Add(Position, _leftUp));
-
             return _LegalMoves;
         }
 
         private void CalculatePawnMoves()
         {
-            AdjustMoveVectors(PieceColor.White);
-            HandlePieceInformation(_up, false);
+            AdjustMoveVectors(Color);
+            EvaluateMove(_up, false);
             
             if (!Moved)
             {
-                if (Color == PieceColor.White && Position.Row == 6)
-                {
-                    HandlePieceInformation(_doubleUp, false);
-                }
-                else if (Color == PieceColor.Black && Position.Row == 1)
-                {
-                    HandlePieceInformation(_doubleUp, false);
-                }
+                EvaluateMove(_doubleUp, false);
             }
 
-            HandlePieceInformation(_rightUp, true);
-            HandlePieceInformation(_leftUp, true);
+            EvaluateMove(_rightUp, true);
+            EvaluateMove(_leftUp, true);
 
             CalculateEnPassantMoves(_left);
             CalculateEnPassantMoves(_right);
@@ -129,8 +118,8 @@ namespace Chess.Engine.Pieces.ChessPieces
                 _leftUp.Row = 1;
             }
         }
-        
-        private void HandlePieceInformation(Square vector, bool capture)
+
+        private void EvaluateMove(Square vector, bool capture)
         {
             ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Row + vector.Row, Position.Column + vector.Column));
 
@@ -154,7 +143,7 @@ namespace Chess.Engine.Pieces.ChessPieces
                 
                 if (piece.Color == Color && capture)
                 {
-                    piece.IsCovered = true;
+                    piece.CoveringPiece = this;
                 }
             }
         }
@@ -163,10 +152,11 @@ namespace Chess.Engine.Pieces.ChessPieces
         {
             ChessPiece piece = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Row + vector.Row, Position.Column + vector.Column));//1 0
 
+            //TODO FIX THIS FUCKING SHIT
             //TODO: ERROR?
             if (piece is Pawn pawn && piece.Color != Color)
             {
-                //blockingPiece
+                // blockingPiece
                 ChessPiece blockingPiece = ChessBoard._ChessBoard.GetPieceAt(new Square(Position.Row + _up.Row, Position.Column + vector.Column));
 
                 //TODO: War != null
@@ -181,6 +171,8 @@ namespace Chess.Engine.Pieces.ChessPieces
 
         public ChessPiece TryPromote()
         {
+            if 
+
             if (Color == PieceColor.White)
             {
                 if (Position.Row == 1)

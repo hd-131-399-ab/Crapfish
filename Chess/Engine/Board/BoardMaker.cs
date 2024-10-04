@@ -6,8 +6,6 @@ namespace Chess.Engine.Board
 {
     public class BoardMaker
     {
-        private bool _drawWhiteSquare = true;
-
         private string _whiteHex;
         private string _blackHex;
         
@@ -21,27 +19,29 @@ namespace Chess.Engine.Board
 
         public void CreateNewBoard()
         {
+            bool drawWhiteSquare = true;
+
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
                     if(j != 0)
                     {
-                        _drawWhiteSquare = !_drawWhiteSquare;
+                        drawWhiteSquare = !drawWhiteSquare;
                     }
 
                     Square pos = new(i, j);
 
-                    CreateNewSquare(pos);
+                    CreateNewSquare(pos, drawWhiteSquare);
                 }
             }
         }
 
-        private void CreateNewSquare(Square position)
+        private void CreateNewSquare(Square position, bool white)
         {
             Rectangle square = new();
 
-            if (_drawWhiteSquare)
+            if (white)
             {
                 square.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom(_whiteHex);
             }

@@ -42,7 +42,7 @@ namespace Chess.Engine.Pieces
 
         public bool IsPinned { get; set; }
         public bool Moved { get; set; }
-        public bool IsCovered { get; set; }
+        public ChessPiece CoveringPiece { get; set; }
         public bool IsKing => FENType.ToString().ToLower() == "k";
 
         public List<Square> _AllMoves = new();

@@ -18,21 +18,21 @@ namespace Chess.Engine.Chess
         public bool WhiteChecked { get; set; }
         public bool BlackChecked { get; set; }
 
-        public enum CastleRights { KingQueen, KingSide, QueenSide, None }
+        public enum CastleRights { Both, KingSide, QueenSide, None }
 
-        public CastleRights WhiteCastleRights { get; set; } = CastleRights.KingQueen;
-        public CastleRights BlackCastleRights { get; set; } = CastleRights.KingQueen;
-
-
-        public List<Board.Square> LegalWhiteMoves = new();
-        public List<Board.Square> RelevantWhiteMoves => LegalWhiteMoves.Distinct().ToList();
-        public List<Board.Square> VirtualWhiteMoves { get; set; } = new();
+        public CastleRights WhiteCastleRights { get; set; } = CastleRights.Both;
+        public CastleRights BlackCastleRights { get; set; } = CastleRights.Both;
 
 
-        public List<Board.Square> LegalBlackMoves = new();
-        public List<Board.Square> OpponentPawnCaptures = new();
-        public List<Board.Square> RelevantBlackMoves => LegalBlackMoves.Distinct().ToList();
-        public List<Board.Square> VirtualBlackMoves { get; set; } = new();
+        public List<Square> LegalWhiteMoves = new();
+        public List<Square> RelevantWhiteMoves => LegalWhiteMoves.Distinct().ToList();
+        public List<Square> VirtualWhiteMoves { get; set; } = new();
+
+
+        public List<Square> LegalBlackMoves = new();
+        public List<Square> OpponentPawnCaptures = new();
+        public List<Square> RelevantBlackMoves => LegalBlackMoves.Distinct().ToList();
+        public List<Square> VirtualBlackMoves { get; set; } = new();
         
         public string FEN { get; set; }
 

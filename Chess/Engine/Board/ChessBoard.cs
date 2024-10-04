@@ -1,7 +1,9 @@
-﻿using Chess.Engine.Pieces;
+﻿using Chess.Engine.Chess;
+using Chess.Engine.Pieces;
 using Chess.Engine.Pieces.ChessPieces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chess.Engine.Board
 {
@@ -19,20 +21,14 @@ namespace Chess.Engine.Board
 
         public List<Square> LegalMoves { get; set; } = new();
 
-        private Dictionary<char, Type> FENAssignment = new()
+        private Dictionary<string, Type> FENAssignment = new()
         {
-            { 'r', typeof(Rook) },
-            { 'n', typeof(Knight) },
-            { 'b', typeof(Bishop) },
-            { 'q', typeof(Queen) },
-            { 'k', typeof(King) },
-            { 'p', typeof(Pawn) },
-            { 'R', typeof(Rook) },
-            { 'N', typeof(Knight) },
-            { 'B', typeof(Bishop) },
-            { 'Q', typeof(Queen) },
-            { 'K', typeof(King) },
-            { 'P', typeof(Pawn) }
+            { "r", typeof(Rook) },
+            { "n", typeof(Knight) },
+            { "b", typeof(Bishop) },
+            { "q", typeof(Queen) },
+            { "k", typeof(King) },
+            { "p", typeof(Pawn) }
         };
 
         public ChessPiece GetPieceAt(Square position)
@@ -49,7 +45,7 @@ namespace Chess.Engine.Board
 
         public ChessPiece AddChessPiece(char fEN, ChessPiece.PieceColor color, Square position)
         {
-            ChessPiece piece = Activator.CreateInstance(FENAssignment[fEN], position, color) as ChessPiece;
+            ChessPiece piece = Activator.CreateInstance(FENAssignment[fEN.ToString().ToLower()], position, color) as ChessPiece;
  
             Pieces[position.Row, position.Column] = piece;
             PieceList.Add(piece);
@@ -58,34 +54,10 @@ namespace Chess.Engine.Board
         }        
 
         public King GetKing(bool returnWhiteKing)
-        {
-            King king = null;
-
-            foreach (ChessPiece piece in PieceList)
-            {
-                if (piece.IsKing && (int)piece.Color == Convert.ToInt32(returnWhiteKing))
-                {
-                    king = (King)piece;
-                }
-            }
-
-            return king;
-        }
-
+            => (King)PieceList.Where(x => x.IsKing && (int)x.Color == Convert.ToInt32(returnWhiteKing)).Single();
+        
         public King GetKing(ChessPiece.PieceColor kingColor)
-        {
-            King king = null;
-
-            foreach (ChessPiece piece in PieceList)
-            {
-                if (piece.IsKing && piece.Color == kingColor)
-                {
-                    king = (King)piece;
-                }
-            }
-
-            return king;
-        }
+            => (King)PieceList.Where(x => x.IsKing && x.Color == kingColor).Single();
 
         public void SetPieceToSquare(ChessPiece piece, Square destinationSquare)
         {
@@ -120,40 +92,30 @@ namespace Chess.Engine.Board
             blackMoves = new();
             opponentPawnCaptures = new();
 
-            King whiteKing = null;
-            King blackKing = null;
-
             foreach (ChessPiece piece in PieceList)
             {
-                if (piece.IsKing)
+                if (!piece.IsKing)
                 {
                     if (piece.Color == ChessPiece.PieceColor.White)
                     {
-                        whiteKing = (King)piece;
+                        whiteMoves.AddRange(piece.CalculateLegalMoves());
                     }
                     else
                     {
-                        blackKing = (King)piece;
+                        blackMoves.AddRange(piece.CalculateLegalMoves());
                     }
-                }
-                else if (piece is Pawn pawn)
-                {
-                    pawn.CalculateLegalMoves();
-                    opponentPawnCaptures.AddRange(pawn.CapturePositions);
-                }
-
-                if (piece.Color == ChessPiece.PieceColor.White)
-                {
-                    whiteMoves.AddRange(piece.CalculateLegalMoves());
-                }
-                else
-                {
-                    blackMoves.AddRange(piece.CalculateLegalMoves());
                 }
             }
 
-            whiteMoves.AddRange(whiteKing.CalculateLegalMoves());
-            blackMoves.AddRange(blackKing.CalculateLegalMoves());
+            var pawns = PieceList.Where(x => x is Pawn && ColorToBool(x.Color) != ChessGame._CurrentGame.WhiteToMove).ToList();
+
+            foreach (Pawn pawn in pawns)
+            {
+                opponentPawnCaptures.AddRange(pawn._LegalCaptures.Select(x => x.Position));
+            }
+
+            whiteMoves.AddRange(GetKing(true).CalculateLegalMoves());
+            blackMoves.AddRange(GetKing(false).CalculateLegalMoves());
         }
 
         public bool ColorToBool(ChessPiece.PieceColor color)
